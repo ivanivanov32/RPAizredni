@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SeminarskaNalogaIvan.Models.Predmeti>
+
+@{
+    ViewBag.Title = "Predmeti";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Predmeti</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PredmetiName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Oceni)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PredmetiName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Oceni)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.PredmetiId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.PredmetiId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PredmetiId })
+        </td>
+    </tr>
+}
+
+</table>

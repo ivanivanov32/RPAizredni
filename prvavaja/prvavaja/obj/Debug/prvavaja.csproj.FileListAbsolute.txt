@@ -1,0 +1,3 @@
+C:\Users\LAPTOP-VODOPIVEC\Source\Repos\RPAizredni\prvavaja\prvavaja\obj\Debug\prvavaja.csproj.AssemblyReference.cache
+C:\Users\LAPTOP-VODOPIVEC\Source\Repos\RPAizredni\prvavaja\prvavaja\obj\Debug\prvavaja.csproj.SuggestedBindingRedirects.cache
+C:\Users\LAPTOP-VODOPIVEC\Source\Repos\RPAizredni\prvavaja\prvavaja\obj\Debug\prvavaja.csproj.CoreCompileInputs.cache

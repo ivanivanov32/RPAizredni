@@ -1,0 +1,656 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Dijak">
+          <Key>
+            <PropertyRef Name="DijID" />
+          </Key>
+          <Property Name="DijID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DijIme" Type="nvarchar" MaxLength="50" />
+          <Property Name="DijPriimek" Type="nvarchar" MaxLength="50" />
+          <Property Name="DijRazred" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="DijDatumRojstva" Type="date" />
+          <Property Name="DijaSlika" Type="image" />
+          <Property Name="DijIDNadDatum" Type="date" />
+          <Property Name="DijIDNadUstanova" Type="nvarchar" MaxLength="50" />
+          <Property Name="DijIDNadPotrditev" Type="date" />
+          <Property Name="DijMati" Type="nvarchar" MaxLength="50" />
+          <Property Name="DijOče" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="DijakPodročje">
+          <Key>
+            <PropertyRef Name="DijID" />
+            <PropertyRef Name="PodID" />
+          </Key>
+          <Property Name="DijID" Type="int" Nullable="false" />
+          <Property Name="PodID" Type="int" Nullable="false" />
+          <Property Name="DijPodTest" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Izvedba">
+          <Key>
+            <PropertyRef Name="IzvID" />
+          </Key>
+          <Property Name="IzvID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IzvDatum" Type="date" />
+          <Property Name="IzvMesec" Type="int" />
+          <Property Name="IzvLeto" Type="int" />
+          <Property Name="IzvOpis" Type="nvarchar(max)" />
+          <Property Name="IzvPodročje" Type="int" />
+          <Property Name="IzvUre" Type="int" />
+          <Property Name="IzvCilji" Type="nvarchar(max)" />
+          <Property Name="IzvUstanova" Type="nvarchar" MaxLength="250" />
+          <Property Name="IzvKraj" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="IzvedbaDijak">
+          <Key>
+            <PropertyRef Name="Izvedba" />
+            <PropertyRef Name="Dijak" />
+          </Key>
+          <Property Name="Izvedba" Type="int" Nullable="false" />
+          <Property Name="Dijak" Type="int" Nullable="false" />
+          <Property Name="brezVeze" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="IzvedbaMentor">
+          <Key>
+            <PropertyRef Name="Izvedba" />
+            <PropertyRef Name="Mentor" />
+          </Key>
+          <Property Name="Izvedba" Type="int" Nullable="false" />
+          <Property Name="Mentor" Type="int" Nullable="false" />
+          <Property Name="brezveze" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Mentor">
+          <Key>
+            <PropertyRef Name="MenId" />
+          </Key>
+          <Property Name="MenId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenIme" Type="nvarchar" MaxLength="50" />
+          <Property Name="MenPriimek" Type="nvarchar" MaxLength="50" />
+          <Property Name="MenSlika" Type="image" />
+          <Property Name="MenVloga" Type="nvarchar" MaxLength="50" />
+          <Property Name="MenNaziv" Type="nvarchar" MaxLength="50" />
+          <Property Name="MenUstanova" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="Profiles">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PropertyNames" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="PropertyValueStrings" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="PropertyValueBinary" Type="image" Nullable="false" />
+          <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsAnonymous" Type="bit" Nullable="false" />
+          <Property Name="LastActivityDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UsersInRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DijakPodročje_Dijak">
+          <End Role="Dijak" Type="Self.Dijak" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DijakPodročje" Type="Self.DijakPodročje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dijak">
+              <PropertyRef Name="DijID" />
+            </Principal>
+            <Dependent Role="DijakPodročje">
+              <PropertyRef Name="DijID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IzvedbaDijak_Dijak">
+          <End Role="Dijak" Type="Self.Dijak" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IzvedbaDijak" Type="Self.IzvedbaDijak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dijak">
+              <PropertyRef Name="DijID" />
+            </Principal>
+            <Dependent Role="IzvedbaDijak">
+              <PropertyRef Name="Dijak" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IzvedbaDijak_Izvedba">
+          <End Role="Izvedba" Type="Self.Izvedba" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IzvedbaDijak" Type="Self.IzvedbaDijak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Izvedba">
+              <PropertyRef Name="IzvID" />
+            </Principal>
+            <Dependent Role="IzvedbaDijak">
+              <PropertyRef Name="Izvedba" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IzvedbaMentor_Izvedba">
+          <End Role="Izvedba" Type="Self.Izvedba" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IzvedbaMentor" Type="Self.IzvedbaMentor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Izvedba">
+              <PropertyRef Name="IzvID" />
+            </Principal>
+            <Dependent Role="IzvedbaMentor">
+              <PropertyRef Name="Izvedba" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IzvedbaMentor_Mentor">
+          <End Role="Mentor" Type="Self.Mentor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IzvedbaMentor" Type="Self.IzvedbaMentor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mentor">
+              <PropertyRef Name="MenId" />
+            </Principal>
+            <Dependent Role="IzvedbaMentor">
+              <PropertyRef Name="Mentor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserProfile">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Profiles" Type="Self.Profiles" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Profiles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UsersInRoleRole">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="UsersInRoles" Type="Self.UsersInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="UsersInRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UsersInRoleUser">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UsersInRoles" Type="Self.UsersInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UsersInRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Dijak" EntityType="Self.Dijak" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DijakPodročje" EntityType="Self.DijakPodročje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Izvedba" EntityType="Self.Izvedba" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IzvedbaDijak" EntityType="Self.IzvedbaDijak" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IzvedbaMentor" EntityType="Self.IzvedbaMentor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mentor" EntityType="Self.Mentor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profiles" EntityType="Self.Profiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsersInRoles" EntityType="Self.UsersInRoles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DijakPodročje_Dijak" Association="Self.FK_DijakPodročje_Dijak">
+            <End Role="Dijak" EntitySet="Dijak" />
+            <End Role="DijakPodročje" EntitySet="DijakPodročje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IzvedbaDijak_Dijak" Association="Self.FK_IzvedbaDijak_Dijak">
+            <End Role="Dijak" EntitySet="Dijak" />
+            <End Role="IzvedbaDijak" EntitySet="IzvedbaDijak" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IzvedbaDijak_Izvedba" Association="Self.FK_IzvedbaDijak_Izvedba">
+            <End Role="Izvedba" EntitySet="Izvedba" />
+            <End Role="IzvedbaDijak" EntitySet="IzvedbaDijak" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IzvedbaMentor_Izvedba" Association="Self.FK_IzvedbaMentor_Izvedba">
+            <End Role="Izvedba" EntitySet="Izvedba" />
+            <End Role="IzvedbaMentor" EntitySet="IzvedbaMentor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IzvedbaMentor_Mentor" Association="Self.FK_IzvedbaMentor_Mentor">
+            <End Role="Mentor" EntitySet="Mentor" />
+            <End Role="IzvedbaMentor" EntitySet="IzvedbaMentor" />
+          </AssociationSet>
+          <AssociationSet Name="UserProfile" Association="Self.UserProfile">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Profiles" EntitySet="Profiles" />
+          </AssociationSet>
+          <AssociationSet Name="UsersInRoleRole" Association="Self.UsersInRoleRole">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UsersInRoles" EntitySet="UsersInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="UsersInRoleUser" Association="Self.UsersInRoleUser">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UsersInRoles" EntitySet="UsersInRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Dijak">
+          <Key>
+            <PropertyRef Name="DijID" />
+          </Key>
+          <Property Name="DijID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DijIme" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DijPriimek" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DijRazred" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="DijDatumRojstva" Type="DateTime" Precision="0" />
+          <Property Name="DijaSlika" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="DijIDNadDatum" Type="DateTime" Precision="0" />
+          <Property Name="DijIDNadUstanova" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DijIDNadPotrditev" Type="DateTime" Precision="0" />
+          <Property Name="DijMati" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DijOče" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Guid" />
+          <NavigationProperty Name="DijakPodročje" Relationship="Self.FK_DijakPodročje_Dijak" FromRole="Dijak" ToRole="DijakPodročje" />
+          <NavigationProperty Name="IzvedbaDijaks" Relationship="Self.FK_IzvedbaDijak_Dijak" FromRole="Dijak" ToRole="IzvedbaDijak" />
+        </EntityType>
+        <EntityType Name="DijakPodročje">
+          <Key>
+            <PropertyRef Name="DijID" />
+            <PropertyRef Name="PodID" />
+          </Key>
+          <Property Name="DijID" Type="Int32" Nullable="false" />
+          <Property Name="PodID" Type="Int32" Nullable="false" />
+          <Property Name="DijPodTest" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Dijak" Relationship="Self.FK_DijakPodročje_Dijak" FromRole="DijakPodročje" ToRole="Dijak" />
+        </EntityType>
+        <EntityType Name="Izvedba">
+          <Key>
+            <PropertyRef Name="IzvID" />
+          </Key>
+          <Property Name="IzvID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IzvDatum" Type="DateTime" Precision="0" />
+          <Property Name="IzvMesec" Type="Int32" />
+          <Property Name="IzvLeto" Type="Int32" />
+          <Property Name="IzvOpis" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IzvPodročje" Type="Int32" />
+          <Property Name="IzvUre" Type="Int32" />
+          <Property Name="IzvCilji" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IzvUstanova" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IzvKraj" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="IzvedbaDijaks" Relationship="Self.FK_IzvedbaDijak_Izvedba" FromRole="Izvedba" ToRole="IzvedbaDijak" />
+          <NavigationProperty Name="IzvedbaMentors" Relationship="Self.FK_IzvedbaMentor_Izvedba" FromRole="Izvedba" ToRole="IzvedbaMentor" />
+        </EntityType>
+        <EntityType Name="IzvedbaDijak">
+          <Key>
+            <PropertyRef Name="Izvedba" />
+            <PropertyRef Name="Dijak" />
+          </Key>
+          <Property Name="Izvedba" Type="Int32" Nullable="false" />
+          <Property Name="Dijak" Type="Int32" Nullable="false" />
+          <Property Name="brezVeze" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Dijak1" Relationship="Self.FK_IzvedbaDijak_Dijak" FromRole="IzvedbaDijak" ToRole="Dijak" />
+          <NavigationProperty Name="Izvedba1" Relationship="Self.FK_IzvedbaDijak_Izvedba" FromRole="IzvedbaDijak" ToRole="Izvedba" />
+        </EntityType>
+        <EntityType Name="IzvedbaMentor">
+          <Key>
+            <PropertyRef Name="Izvedba" />
+            <PropertyRef Name="Mentor" />
+          </Key>
+          <Property Name="Izvedba" Type="Int32" Nullable="false" />
+          <Property Name="Mentor" Type="Int32" Nullable="false" />
+          <Property Name="brezveze" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Izvedba1" Relationship="Self.FK_IzvedbaMentor_Izvedba" FromRole="IzvedbaMentor" ToRole="Izvedba" />
+          <NavigationProperty Name="Mentor1" Relationship="Self.FK_IzvedbaMentor_Mentor" FromRole="IzvedbaMentor" ToRole="Mentor" />
+        </EntityType>
+        <EntityType Name="Mentor">
+          <Key>
+            <PropertyRef Name="MenId" />
+          </Key>
+          <Property Name="MenId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenIme" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MenPriimek" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MenSlika" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="MenVloga" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MenNaziv" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MenUstanova" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="Guid" />
+          <NavigationProperty Name="IzvedbaMentors" Relationship="Self.FK_IzvedbaMentor_Mentor" FromRole="Mentor" ToRole="IzvedbaMentor" />
+        </EntityType>
+        <EntityType Name="Profile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="PropertyNames" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PropertyValueStrings" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PropertyValueBinary" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="LastUpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="User" Relationship="Self.UserProfile" FromRole="Profiles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="ApplicationId" Type="Guid" Nullable="false" />
+          <Property Name="RoleId" Type="Guid" Nullable="false" />
+          <Property Name="RoleName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.UsersInRoles" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ApplicationId" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsAnonymous" Type="Boolean" Nullable="false" />
+          <Property Name="LastActivityDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Profile" Relationship="Self.UserProfile" FromRole="Users" ToRole="Profiles" />
+          <NavigationProperty Name="Roles" Relationship="Self.UsersInRoles" FromRole="Users" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK_DijakPodročje_Dijak">
+          <End Role="Dijak" Type="Self.Dijak" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DijakPodročje" Type="Self.DijakPodročje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dijak">
+              <PropertyRef Name="DijID" />
+            </Principal>
+            <Dependent Role="DijakPodročje">
+              <PropertyRef Name="DijID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IzvedbaDijak_Dijak">
+          <End Role="Dijak" Type="Self.Dijak" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IzvedbaDijak" Type="Self.IzvedbaDijak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dijak">
+              <PropertyRef Name="DijID" />
+            </Principal>
+            <Dependent Role="IzvedbaDijak">
+              <PropertyRef Name="Dijak" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IzvedbaDijak_Izvedba">
+          <End Role="Izvedba" Type="Self.Izvedba" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IzvedbaDijak" Type="Self.IzvedbaDijak" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Izvedba">
+              <PropertyRef Name="IzvID" />
+            </Principal>
+            <Dependent Role="IzvedbaDijak">
+              <PropertyRef Name="Izvedba" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IzvedbaMentor_Izvedba">
+          <End Role="Izvedba" Type="Self.Izvedba" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IzvedbaMentor" Type="Self.IzvedbaMentor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Izvedba">
+              <PropertyRef Name="IzvID" />
+            </Principal>
+            <Dependent Role="IzvedbaMentor">
+              <PropertyRef Name="Izvedba" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IzvedbaMentor_Mentor">
+          <End Role="Mentor" Type="Self.Mentor" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="IzvedbaMentor" Type="Self.IzvedbaMentor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mentor">
+              <PropertyRef Name="MenId" />
+            </Principal>
+            <Dependent Role="IzvedbaMentor">
+              <PropertyRef Name="Mentor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserProfile">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Profiles" Type="Self.Profile" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Profiles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UsersInRoles">
+          <End Role="Roles" Type="Self.Role" Multiplicity="*" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dijaks" EntityType="Self.Dijak" />
+          <EntitySet Name="DijakPodročje" EntityType="Self.DijakPodročje" />
+          <EntitySet Name="Izvedbas" EntityType="Self.Izvedba" />
+          <EntitySet Name="IzvedbaDijaks" EntityType="Self.IzvedbaDijak" />
+          <EntitySet Name="IzvedbaMentors" EntityType="Self.IzvedbaMentor" />
+          <EntitySet Name="Mentors" EntityType="Self.Mentor" />
+          <EntitySet Name="Profiles" EntityType="Self.Profile" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_DijakPodročje_Dijak" Association="Self.FK_DijakPodročje_Dijak">
+            <End Role="Dijak" EntitySet="Dijaks" />
+            <End Role="DijakPodročje" EntitySet="DijakPodročje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IzvedbaDijak_Dijak" Association="Self.FK_IzvedbaDijak_Dijak">
+            <End Role="Dijak" EntitySet="Dijaks" />
+            <End Role="IzvedbaDijak" EntitySet="IzvedbaDijaks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IzvedbaDijak_Izvedba" Association="Self.FK_IzvedbaDijak_Izvedba">
+            <End Role="Izvedba" EntitySet="Izvedbas" />
+            <End Role="IzvedbaDijak" EntitySet="IzvedbaDijaks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IzvedbaMentor_Izvedba" Association="Self.FK_IzvedbaMentor_Izvedba">
+            <End Role="Izvedba" EntitySet="Izvedbas" />
+            <End Role="IzvedbaMentor" EntitySet="IzvedbaMentors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IzvedbaMentor_Mentor" Association="Self.FK_IzvedbaMentor_Mentor">
+            <End Role="Mentor" EntitySet="Mentors" />
+            <End Role="IzvedbaMentor" EntitySet="IzvedbaMentors" />
+          </AssociationSet>
+          <AssociationSet Name="UserProfile" Association="Self.UserProfile">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Profiles" EntitySet="Profiles" />
+          </AssociationSet>
+          <AssociationSet Name="UsersInRoles" Association="Self.UsersInRoles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Dijaks">
+            <EntityTypeMapping TypeName="Model.Dijak">
+              <MappingFragment StoreEntitySet="Dijak">
+                <ScalarProperty Name="DijID" ColumnName="DijID" />
+                <ScalarProperty Name="DijIme" ColumnName="DijIme" />
+                <ScalarProperty Name="DijPriimek" ColumnName="DijPriimek" />
+                <ScalarProperty Name="DijRazred" ColumnName="DijRazred" />
+                <ScalarProperty Name="DijDatumRojstva" ColumnName="DijDatumRojstva" />
+                <ScalarProperty Name="DijaSlika" ColumnName="DijaSlika" />
+                <ScalarProperty Name="DijIDNadDatum" ColumnName="DijIDNadDatum" />
+                <ScalarProperty Name="DijIDNadUstanova" ColumnName="DijIDNadUstanova" />
+                <ScalarProperty Name="DijIDNadPotrditev" ColumnName="DijIDNadPotrditev" />
+                <ScalarProperty Name="DijMati" ColumnName="DijMati" />
+                <ScalarProperty Name="DijOče" ColumnName="DijOče" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DijakPodročje">
+            <EntityTypeMapping TypeName="Model.DijakPodročje">
+              <MappingFragment StoreEntitySet="DijakPodročje">
+                <ScalarProperty Name="DijID" ColumnName="DijID" />
+                <ScalarProperty Name="PodID" ColumnName="PodID" />
+                <ScalarProperty Name="DijPodTest" ColumnName="DijPodTest" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Izvedbas">
+            <EntityTypeMapping TypeName="Model.Izvedba">
+              <MappingFragment StoreEntitySet="Izvedba">
+                <ScalarProperty Name="IzvID" ColumnName="IzvID" />
+                <ScalarProperty Name="IzvDatum" ColumnName="IzvDatum" />
+                <ScalarProperty Name="IzvMesec" ColumnName="IzvMesec" />
+                <ScalarProperty Name="IzvLeto" ColumnName="IzvLeto" />
+                <ScalarProperty Name="IzvOpis" ColumnName="IzvOpis" />
+                <ScalarProperty Name="IzvPodročje" ColumnName="IzvPodročje" />
+                <ScalarProperty Name="IzvUre" ColumnName="IzvUre" />
+                <ScalarProperty Name="IzvCilji" ColumnName="IzvCilji" />
+                <ScalarProperty Name="IzvUstanova" ColumnName="IzvUstanova" />
+                <ScalarProperty Name="IzvKraj" ColumnName="IzvKraj" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IzvedbaDijaks">
+            <EntityTypeMapping TypeName="Model.IzvedbaDijak">
+              <MappingFragment StoreEntitySet="IzvedbaDijak">
+                <ScalarProperty Name="Izvedba" ColumnName="Izvedba" />
+                <ScalarProperty Name="Dijak" ColumnName="Dijak" />
+                <ScalarProperty Name="brezVeze" ColumnName="brezVeze" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IzvedbaMentors">
+            <EntityTypeMapping TypeName="Model.IzvedbaMentor">
+              <MappingFragment StoreEntitySet="IzvedbaMentor">
+                <ScalarProperty Name="Izvedba" ColumnName="Izvedba" />
+                <ScalarProperty Name="Mentor" ColumnName="Mentor" />
+                <ScalarProperty Name="brezveze" ColumnName="brezveze" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mentors">
+            <EntityTypeMapping TypeName="Model.Mentor">
+              <MappingFragment StoreEntitySet="Mentor">
+                <ScalarProperty Name="MenId" ColumnName="MenId" />
+                <ScalarProperty Name="MenIme" ColumnName="MenIme" />
+                <ScalarProperty Name="MenPriimek" ColumnName="MenPriimek" />
+                <ScalarProperty Name="MenSlika" ColumnName="MenSlika" />
+                <ScalarProperty Name="MenVloga" ColumnName="MenVloga" />
+                <ScalarProperty Name="MenNaziv" ColumnName="MenNaziv" />
+                <ScalarProperty Name="MenUstanova" ColumnName="MenUstanova" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profiles">
+            <EntityTypeMapping TypeName="Model.Profile">
+              <MappingFragment StoreEntitySet="Profiles">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PropertyNames" ColumnName="PropertyNames" />
+                <ScalarProperty Name="PropertyValueStrings" ColumnName="PropertyValueStrings" />
+                <ScalarProperty Name="PropertyValueBinary" ColumnName="PropertyValueBinary" />
+                <ScalarProperty Name="LastUpdatedDate" ColumnName="LastUpdatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Model.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Model.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="IsAnonymous" ColumnName="IsAnonymous" />
+                <ScalarProperty Name="LastActivityDate" ColumnName="LastActivityDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="UsersInRoles" TypeName="Model.UsersInRoles" StoreEntitySet="UsersInRoles">
+            <EndProperty Name="Roles">
+              <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="Users">
+              <ScalarProperty Name="UserId" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
